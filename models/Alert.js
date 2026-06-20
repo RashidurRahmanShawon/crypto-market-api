@@ -17,3 +17,5 @@ const Alert = db.define('Alert', {
 },{
     tableName: 'price_alerts'
 });
+
+module.exports = Alert;

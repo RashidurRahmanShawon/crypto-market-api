@@ -1,4 +1,5 @@
 const alert = require('../engine');
+const Alert = require('../models/Alert');
 
 const getMarketData = async (req, res, next) =>{
     try{
@@ -12,12 +13,18 @@ const getMarketData = async (req, res, next) =>{
     }
 };
 
-const calculateThreshold = async  (req, res, nect) =>{
+const calculateThreshold = async  (req, res, next) =>{
     try{
         const {coin, targetPrice, currency} = req.body;
         const reqCoin  = coin.toLowerCase();
         const reqCurrency = (currency || 'usd').toLowerCase();
         
+        const saveAlert = await Alert.create({
+            coin: reqCoin,
+            targetPrice: targetPrice,
+            currency: reqCurrency
+        });
+        console.log(`[DATABASE] Saved alert for ${reqCoin} at target price ${targetPrice} ${reqCurrency}`);
         console.log(`[POST API] Received threshold alert request for ${coin} with target price ${targetPrice} ${currency || 'usd'}`);
         const currentMarketData = await  alert(reqCoin, reqCurrency);
         const currentPrice = currentMarketData.price;
