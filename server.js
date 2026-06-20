@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-
+const db = require('./config/database');
 app.use(express.json());
 app.use((req, res, next)=>{
     const currentTimeStamp = new Date().toISOString();
@@ -30,6 +30,14 @@ app.use((err, req, res, next) =>{
     });
 });
 
-app.listen(port, () =>{
-    console.log(`[SERVER] Server is running on port ${port}`);
-});
+db.sync({force: false})
+.then(()=>{
+    console.log('[DATABASE]: Connected successfully.');
+    app.listen(port, () =>{
+        console.log(`[SERVER]: Running on port ${port}`);
+    })
+})
+
+.catch((err) =>{
+    console.log(`[DATABASE ERROR]: ${err.message}`);
+})
