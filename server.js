@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const db = require('./config/database');
+const startAlertChecker = require('./worker/alertWorker');
 app.use(express.json());
 app.use((req, res, next)=>{
     const currentTimeStamp = new Date().toISOString();
@@ -36,6 +37,8 @@ db.sync({force: false})
     app.listen(port, () =>{
         console.log(`[SERVER]: Running on port ${port}`);
     })
+
+    startAlertChecker(30000);
 })
 
 .catch((err) =>{
