@@ -20,7 +20,15 @@ app.get('/', async (req, res) =>{
     res.send('Moduler MultiFile API is online. Please visit api/market/ for alert');
 });
 
-
+app.use((err, req, res, next) =>{
+    console.log(`[GLOBAL ERROR CATCH]: ${err.message}`);
+    const statusCode = err.StatusCode || 500;
+    res.status(statusCode).json({
+        success: false,
+        error: err.message || 'An unexpected error occurred',
+        timeStamp: new Date().toISOString()
+    });
+});
 
 app.listen(port, () =>{
     console.log(`[SERVER] Server is running on port ${port}`);

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const alert = require('../engine');
 
-router.get('/:coin', async (req, res) =>{
+router.get('/:coin', async (req, res, next) =>{
     try{
         const  reqCoin = req.params.coin;
         const reqCurrency = (req.query.currency || 'usd').toLowerCase();
@@ -10,12 +10,11 @@ router.get('/:coin', async (req, res) =>{
         const report = await alert(reqCoin, reqCurrency);
         res.json(report);
     } catch (err) {
-        console.log('[ERROR]: ', err.message);
-        res.status(500).json({error: err.message});
+        next(err);
     }
 });
 
-router.post('/threshold', async (req, res) =>{
+router.post('/threshold', async (req, res, next) =>{
     try{
         const {coin, targetPrice, currency} = req.body;
         const reqCoin  = coin.toLowerCase();
@@ -38,8 +37,7 @@ router.post('/threshold', async (req, res) =>{
             : `⚠️ Target not reached. ${coin} is at ${currentPrice} ${reqCurrency}, below your target of ${targetPrice} ${reqCurrency}.`
         });
     } catch (err) {
-        console.log('[POST ERROR]: ', err.message);
-        res.status(500).json({error: err.message});
+        next(err);
     }
 });
 
