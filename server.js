@@ -15,8 +15,11 @@ app.use((req, res, next)=>{
 
 const port = process.env.PORT;
 const marketRouter = require('./routes/market');
+const authRouter = require('./routes/auth');
 
 app.use('/api/market', marketRouter);
+app.use('/api/auth', authRouter);
+
 
 app.use((err, req, res, next) =>{
     console.log(`[GLOBAL ERROR CATCH]: ${err.message}`);
