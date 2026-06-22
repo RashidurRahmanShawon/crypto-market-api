@@ -8,4 +8,6 @@ router.post('/threshold', marketController.calculateThreshold);
 
 router.delete('/alert/:id', marketController.deleteAlert);
 
+router.get('/alerts', marketController.getAlertHistory);
+
 module.exports = router;

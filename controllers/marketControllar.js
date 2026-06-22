@@ -46,6 +46,19 @@ const calculateThreshold = async  (req, res, next) =>{
     }
 };
 
+const getAlertHistory = async (req, res, next) =>{
+    try{
+        const history = await Alert.findAll();
+        res.json({
+            success : true,
+            count: history.length,
+            data: history
+        });
+    } catch (err){
+        next(err);
+    }
+}
+
 const deleteAlert = async (req, res, next) =>{
     try{
         const {id} = req.params;
@@ -68,5 +81,6 @@ const deleteAlert = async (req, res, next) =>{
 module.exports =  {
     getMarketData,
     calculateThreshold,
+    getAlertHistory,
     deleteAlert
 }
