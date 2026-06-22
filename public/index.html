@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Monitor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Crypto Engine</h1>
+            <div id="connection-badge" class="badge testing">System Initializing...</div>
+        </header>
+        <section class="form-card">
+            <h2>Set New Price Threshold</h2>
+            <form id="alert-form">
+                <div class="form-group">
+                    <label for="coin">Asset Token Name</label>
+                    <input type="text" id="coin" name="coin" placeholder="e.g., BITCOIN, ETHEREUM" required>
+                </div>
+                <div class="form-group">
+                    <label for="targetPrice">Price Threshold</label>
+                    <input type="number" id="targetPrice" step="any" name="targetPrice" placeholder="e.g., 50000" required>
+                </div>
+                <div class="form-group">
+                    <label for="currency">Fiat Currency</label>
+                    <select id="currency">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="JPY">JPY</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Lock Target into Database</button>
+            </form>
+        </section>
+        <section class="vault-section">
+            <h2>Active Database Targets</h2>
+            <div id="alerts-grid" class="grid-container">
+                <div id="mock-card">
+                    <h3>bitcoin <span>(USD)</span></h3>
+                    <p class="Target-display">Target: $95,000.00</p>
+                    <p class="status-text animate">Background loop actively monitoring...</p>
+                    <button class="btn-delete-mock">Clear Target</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

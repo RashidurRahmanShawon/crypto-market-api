@@ -4,6 +4,7 @@ const app = express();
 const db = require('./config/database');
 const startAlertChecker = require('./worker/alertWorker');
 app.use(express.json());
+app.use(express.static('public'));
 app.use((req, res, next)=>{
     const currentTimeStamp = new Date().toISOString();
     const httpMethod = req.method;
@@ -17,14 +18,10 @@ const marketRouter = require('./routes/market');
 
 app.use('/api/market', marketRouter);
 
-app.get('/', async (req, res) =>{
-    res.send('Moduler MultiFile API is online. Please visit api/market/ for alert');
-});
-
 app.use((err, req, res, next) =>{
     console.log(`[GLOBAL ERROR CATCH]: ${err.message}`);
-    const statusCode = err.StatusCode || 500;
-    res.status(statusCode).json({
+    const StatusCode = err.StatusCode || 500;
+    res.status(StatusCode).json({
         success: false,
         error: err.message || 'An unexpected error occurred',
         timeStamp: new Date().toISOString()
