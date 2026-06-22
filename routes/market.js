@@ -6,4 +6,6 @@ router.get('/:coin', marketController.getMarketData);
 
 router.post('/threshold', marketController.calculateThreshold);
 
+router.delete('/alert/:id', marketController.deleteAlert);
+
 module.exports = router;

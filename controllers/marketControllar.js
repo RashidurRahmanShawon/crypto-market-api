@@ -46,7 +46,27 @@ const calculateThreshold = async  (req, res, next) =>{
     }
 };
 
+const deleteAlert = async (req, res, next) =>{
+    try{
+        const {id} = req.params;
+        const rowDeleted = await Alert.destroy({where:{id: id}});
+        if(!rowDeleted){
+            const error = new Error(`Alert with id ${id} not found`);
+            error.statusCode = 404;
+            throw error;
+        }
+        console.log(`[DATABASE] Deleted alert with id ${id}`);
+        res.json({
+            success: true,
+            message: `Alert with id ${id} has been deleted`
+        });
+    } catch (err){
+        next(err);
+    }
+};
+
 module.exports =  {
     getMarketData,
-    calculateThreshold
+    calculateThreshold,
+    deleteAlert
 }
