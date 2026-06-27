@@ -22,7 +22,8 @@ const calculateThreshold = async  (req, res, next) =>{
         const saveAlert = await Alert.create({
             coin: reqCoin,
             targetPrice: targetPrice,
-            currency: reqCurrency
+            currency: reqCurrency,
+            UserId : req.user.id
         });
         console.log(`[DATABASE] Saved alert for ${reqCoin} at target price ${targetPrice} ${reqCurrency}`);
         console.log(`[POST API] Received threshold alert request for ${coin} with target price ${targetPrice} ${currency || 'usd'}`);
@@ -48,7 +49,9 @@ const calculateThreshold = async  (req, res, next) =>{
 
 const getAlertHistory = async (req, res, next) =>{
     try{
-        const history = await Alert.findAll();
+        const history = await Alert.findAll({
+            where: {UserId: req.user.id}
+        });
         res.json({
             success : true,
             count: history.length,
@@ -62,7 +65,12 @@ const getAlertHistory = async (req, res, next) =>{
 const deleteAlert = async (req, res, next) =>{
     try{
         const {id} = req.params;
-        const rowDeleted = await Alert.destroy({where:{id: id}});
+        const rowDeleted = await Alert.destroy({
+            where: {
+                id: id,
+                UserId: req.user.id
+            }
+        });
         if(!rowDeleted){
             const error = new Error(`Alert with id ${id} not found`);
             error.statusCode = 404;
