@@ -4,7 +4,19 @@ const systemStatus = document.getElementById('connection-badge');
 
 async function loadAlertHistory(){
     try{
-        const response = await fetch('/api/market/history/all');
+        const token = localStorage.getItem('cryptoToken');
+        if(!token){
+            systemStatus.textContent = 'Please login  to view targets';
+            systemStatus.className = 'badge offline';
+            return;
+        }
+
+        const response = await fetch('/api/market/history/all', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const result = await response.json();
         if(!result.success) throw new Error(result.error);
 
@@ -35,8 +47,12 @@ async function loadAlertHistory(){
 
 async function deleteAlertFromServer(id){
     try{
+        const token = localStorage.getItem('cryptoToken');
         const response = await fetch(`/api/market/alert/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers : {
+                'Authorization': `Bearer ${token}`
+            }
         });
         const result = await response.json();
         if(result.success){
@@ -49,14 +65,23 @@ async function deleteAlertFromServer(id){
 
 alertForm.addEventListener('submit',  async (e) =>{
     e.preventDefault();
+    const token = localStorage.getItem('cryptoToken');
     const coin = document.getElementById('coin').value;
     const targetPrice = document.getElementById('targetPrice').value;
     const currency = document.getElementById('currency').value;
 
+    if(!token){
+        alert('Please login to create alerts.');
+        return;
+    }
+
     try{
         const response = await fetch('/api/market/threshold', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({coin, targetPrice, currency})
         });
         const result = await response.json();
