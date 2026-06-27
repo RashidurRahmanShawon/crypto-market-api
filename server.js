@@ -3,6 +3,12 @@ const express = require('express');
 const app = express();
 const db = require('./config/database');
 const startAlertChecker = require('./worker/alertWorker');
+const User = require('./models/User');
+const Alert = require('./models/Alert');
+
+User.hasMany(Alert, { onDelete: 'CASCADE' });
+Alert.belongsTo(User);
+
 app.use(express.json());
 app.use(express.static('public'));
 app.use((req, res, next)=>{
